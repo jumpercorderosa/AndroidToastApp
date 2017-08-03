@@ -1,0 +1,79 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.example.danielletolentino.toastapp"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    //diferentes versões
+    productFlavors {
+
+        normal{
+            //lê oq esta no defaultConfig
+        }
+
+        demo {
+            applicationIdSuffix = ".demo"
+        }
+
+        diferentao {
+            applicationId "br.com.danielletolentino.diferentao"
+            versionName "0.0.1"
+            versionCode 1 //cada vez que sobe o app pra loja, tem que incrementar esse cara
+        }
+    }
+
+    //arquivo para fazer a assinatura do apk
+    signingConfigs {
+        release {
+            storeFile file("../.sign/app.keystore")
+            storePassword "storePassword"
+            keyAlias "keyAlias"
+            keyPassword "keyPassword"
+        }
+    }
+
+    //aponto para diferentes ambientes
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("boolean", "REPORT_CRASH", "true")
+        }
+
+        homolog {
+            signingConfig signingConfigs.release
+            buildConfigField("boolean", "REPORT_CRASH", "true")
+        }
+
+        debug {
+            signingConfig signingConfigs.release
+            buildConfigField("boolean", "REPORT_CRASH", "false")
+        }
+    }
+}
+
+repositories {
+    maven {
+        url "file:///C:/rep/"
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    testCompile 'junit:junit:4.12'
+
+    compile 'com.example.danielletolentino:minhabiblioteca:0.0.1'
+}
